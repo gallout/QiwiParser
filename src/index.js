@@ -6,14 +6,15 @@ import TodoList from "./components/TodoList";
 import TodoListModel from "./models/TodoListModel";
 import TodoModel from "./models/TodoModel";
 
-import './index.css';
-import Parser from './models/Parser';
-import logo from './pictures/logo.svg'
+import "./index.css";
+import Parser from "./models/Parser";
+import logo from "./pictures/logo.svg";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 const store = new TodoListModel();
 
 render(
-  <div>
+  <div align="center">
     <DevTools />
     {/*<TodoList store={store} /> */}
     <img src={logo} width="250" height="100" alt="logo" />
