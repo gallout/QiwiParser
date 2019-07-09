@@ -19,10 +19,44 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   module: {
-    rules: [{
-      test: /\.jsx?$/,
-      use: ['babel-loader'],
-      include: path.join(__dirname, 'src')
-    }]
+  
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: ['babel-loader'],
+        include: path.join(__dirname, 'src'),
+      },
+      { test: /\.css$/, use: [ 'style-loader', 'css-loader' ] },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {},
+          },
+        ],
+      },
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: [
+            {
+                loader: 'style-loader',
+            },
+            {
+                loader: 'css-loader',
+                options: {
+                    sourceMap: true,
+                },
+            },
+            {
+                loader: 'sass-loader',
+                options: {
+                    sourceMap: true,
+                },
+            },
+        ],
+    },
+    ]
   }
 };

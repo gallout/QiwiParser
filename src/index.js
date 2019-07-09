@@ -6,12 +6,18 @@ import TodoList from "./components/TodoList";
 import TodoListModel from "./models/TodoListModel";
 import TodoModel from "./models/TodoModel";
 
+import './index.css';
+import Parser from './models/Parser';
+import logo from './pictures/logo.svg'
+
 const store = new TodoListModel();
 
 render(
   <div>
     <DevTools />
-    <TodoList store={store} />
+    {/*<TodoList store={store} /> */}
+    <img src={logo} width="250" height="100" alt="logo" />
+    <Parser />
   </div>,
   document.getElementById("root")
 );
