@@ -1,49 +1,42 @@
 import React, { Component } from "react";
-import { observable } from "mobx";
 import { observer } from "mobx-react";
-import Card from "../components/CardDecorator";
+import { observable, action } from "mobx";
+import Card from "./CardDecorator";
 import $ from "jquery";
 
 const Youtube_apikey = "AIzaSyBoESd9O44wtPnSv-o81WTl7e4vZdVjkCU";
 const Vimeo_apikey = "7cb4bc54de02cffbb23dcae186a69db4";
+
+@observer
 class Parser extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      keyword: "",
-      vimeoTitle: [],
-      vimeoPhoto: [],
-      vimeoLink: [],
-      youtubeTitle: [],
-      youtubePhoto: [],
-      youtubeLink: []
-    };
-    this.clicked = this.clicked.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
+  @action handleChange = e => {
+    this.props.store.keyword = e.target.value;
+  };
 
   clicked() {
     const VimeoUrl = `https://api.vimeo.com/videos?query=${
-      this.state.keyword
+      this.props.store.keyword
     }&access_token=${Vimeo_apikey}`;
     const YouTubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${
-      this.state.keyword
+      this.props.store.keyword
     }&type=video&key=${Youtube_apikey}`;
     fetch(YouTubeUrl)
       .then(response => response.json())
       .then(responseJson => {
         //console.log(responseJson);
         //const youtubeResult = responseJson.items.map(obj=> "https://www.youtube.com/embed/"+ obj.id.videoId)
-        const youtubeTitle = responseJson.items.map(obj => obj.snippet.title);
-        const youtubePhoto = responseJson.items.map(
+        this.props.store.youtubeTitle = responseJson.items.map(
+          obj => obj.snippet.title
+        );
+        this.props.store.youtubePhoto = responseJson.items.map(
           obj => obj.snippet.thumbnails.medium.url
         );
-        const youtubeLink = responseJson.items.map(
+        this.props.store.youtubeLink = responseJson.items.map(
           obj => "https://www.youtube.com/watch?v=" + obj.id.videoId
         );
-        this.setState({ youtubeTitle });
-        this.setState({ youtubePhoto });
-        this.setState({ youtubeLink });
+        //this.setState({ youtubeTitle });
+        //this.setState({ youtubePhoto });
+        //this.setState({ youtubeLink });
       })
       .catch(error => {
         console.error(error);
@@ -53,24 +46,18 @@ class Parser extends Component {
       .then(responseJson => {
         //console.log(responseJson);
         //const vimeoResult = responseJson.data.map(obj=> "https://player.vimeo.com"+ obj.uri.replace('videos','video'))
-        const vimeoTitle = responseJson.data.map(obj => obj.name);
-        const vimeoPhoto = responseJson.data.map(
+        this.props.store.vimeoTitle = responseJson.data.map(obj => obj.name);
+        this.props.store.vimeoPhoto = responseJson.data.map(
           obj => obj.pictures.sizes[2].link
         );
-        const vimeoLink = responseJson.data.map(obj => obj.link);
-        this.setState({ vimeoTitle });
-        this.setState({ vimeoPhoto });
-        this.setState({ vimeoLink });
+        this.props.store.vimeoLink = responseJson.data.map(obj => obj.link);
+        //this.setState({ vimeoTitle });
+        //this.setState({ vimeoPhoto });
+        //this.setState({ vimeoLink });
       })
       .catch(error => {
         console.error(error);
       });
-  }
-
-  handleChange(e) {
-    this.setState({
-      keyword: e.target.value
-    });
   }
 
   componentDidUpdate() {
@@ -80,7 +67,6 @@ class Parser extends Component {
           .parent(".frame")
           .parent(".overflow")
           .parent("#card-id")
-
           .hide();
       } else {
         $(this)
@@ -92,6 +78,10 @@ class Parser extends Component {
     });
   }
 
+  componentWillMount() {
+    document.title = "Qiwi Parser";
+  }
+
   render() {
     //console.log(this.state.keyword);
     //console.log(this.state.youtubeLink);
@@ -100,7 +90,7 @@ class Parser extends Component {
         <input
           type="text"
           placeholder="Поиск по YouTube и Vimeo..."
-          value={this.state.keyword}
+          value={this.props.store.keyword}
           onChange={this.handleChange}
           required
           onKeyPress={event => {
@@ -113,7 +103,7 @@ class Parser extends Component {
           }}
         />
 
-        {this.state.youtubePhoto.map((item, idx) => {
+        {this.props.store.youtubePhoto.map((item, idx) => {
           var YouTubeFrame = (
             <div key={idx} className="frame">
               <iframe
@@ -130,7 +120,7 @@ class Parser extends Component {
               <iframe
                 width="340"
                 height="200"
-                src={this.state.vimeoPhoto[idx]}
+                src={this.props.store.vimeoPhoto[idx]}
                 frameBorder="0"
                 allowFullScreen
               />
@@ -141,20 +131,20 @@ class Parser extends Component {
               <div className="col-md-4">
                 <Card
                   imgsrc={YouTubeFrame}
-                  title={this.state.youtubeTitle[idx]}
+                  title={this.props.store.youtubeTitle[idx]}
                   className="btn btn-outline-danger"
                   resource="Youtube"
-                  link={this.state.youtubeLink[idx]}
+                  link={this.props.store.youtubeLink[idx]}
                 />
               </div>
 
               <div className="col-md-4">
                 <Card
                   imgsrc={VimeoFrame}
-                  title={this.state.vimeoTitle[idx]}
+                  title={this.props.store.vimeoTitle[idx]}
                   className="btn btn-outline-primary"
                   resource="Vimeo"
-                  link={this.state.vimeoLink[idx]}
+                  link={this.props.store.vimeoLink[idx]}
                 />
               </div>
             </div>
