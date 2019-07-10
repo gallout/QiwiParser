@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { observable, action } from "mobx";
-import Card from "./CardDecorator";
+import Card from "./Card";
 import $ from "jquery";
 
 const Youtube_apikey = "AIzaSyBoESd9O44wtPnSv-o81WTl7e4vZdVjkCU";

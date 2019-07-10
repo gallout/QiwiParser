@@ -8,8 +8,4 @@ export default class ParserModel {
   @observable youtubeTitle = [];
   @observable youtubePhoto = [];
   @observable youtubeLink = [];
-
-  @action handleChange = e => {
-    this.props.store.keyword = e.target.value;
-  };
 }
