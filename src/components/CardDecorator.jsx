@@ -17,7 +17,7 @@ const Card = props => {
 
               <td>
                 <div className="card-video-link">
-                  <a href="#" className={props.className}>
+                  <a href={props.link} className={props.className}>
                     {props.resource}
                   </a>
                 </div>

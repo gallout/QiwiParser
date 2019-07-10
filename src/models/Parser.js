@@ -13,8 +13,10 @@ class Parser extends Component {
       keyword: "",
       vimeoTitle: [],
       vimeoPhoto: [],
+      vimeoLink: [],
       youtubeTitle: [],
-      youtubePhoto: []
+      youtubePhoto: [],
+      youtubeLink: []
     };
     this.clicked = this.clicked.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -36,8 +38,12 @@ class Parser extends Component {
         const youtubePhoto = responseJson.items.map(
           obj => obj.snippet.thumbnails.medium.url
         );
+        const youtubeLink = responseJson.items.map(
+          obj => "https://www.youtube.com/watch?v=" + obj.id.videoId
+        );
         this.setState({ youtubeTitle });
         this.setState({ youtubePhoto });
+        this.setState({ youtubeLink });
       })
       .catch(error => {
         console.error(error);
@@ -51,8 +57,10 @@ class Parser extends Component {
         const vimeoPhoto = responseJson.data.map(
           obj => obj.pictures.sizes[2].link
         );
+        const vimeoLink = responseJson.data.map(obj => obj.link);
         this.setState({ vimeoTitle });
         this.setState({ vimeoPhoto });
+        this.setState({ vimeoLink });
       })
       .catch(error => {
         console.error(error);
@@ -86,6 +94,7 @@ class Parser extends Component {
 
   render() {
     //console.log(this.state.keyword);
+    //console.log(this.state.youtubeLink);
     return (
       <div align="center" width="100%">
         <input
@@ -135,6 +144,7 @@ class Parser extends Component {
                   title={this.state.youtubeTitle[idx]}
                   className="btn btn-outline-danger"
                   resource="Youtube"
+                  link={this.state.youtubeLink[idx]}
                 />
               </div>
 
@@ -144,6 +154,7 @@ class Parser extends Component {
                   title={this.state.vimeoTitle[idx]}
                   className="btn btn-outline-primary"
                   resource="Vimeo"
+                  link={this.state.vimeoLink[idx]}
                 />
               </div>
             </div>
