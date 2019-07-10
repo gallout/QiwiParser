@@ -66,13 +66,3 @@ body {
 .col-md-4 {
   margin-top: 10px;
 }
-
-.name {
-  width: 200px;
-  display: inline-block;
-}
-.number {
-  width: 200px;
-  display: inline-block;
-  text-align: right;
-}

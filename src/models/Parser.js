@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
-import ytlogo from "../pictures/yt_logo.png";
-import vimeologo from "../pictures/vimeo_logo.png";
 import Card from "../components/CardDecorator";
+import $ from "jquery";
 
-const Youtube_apikey = "AIzaSyBk0iw15EM9IPw542sgLFZXOPbqDzCXm0E";
+const Youtube_apikey = "AIzaSyBoESd9O44wtPnSv-o81WTl7e4vZdVjkCU";
 const Vimeo_apikey = "7cb4bc54de02cffbb23dcae186a69db4";
 class Parser extends Component {
   constructor(props) {
@@ -25,13 +24,13 @@ class Parser extends Component {
     const VimeoUrl = `https://api.vimeo.com/videos?query=${
       this.state.keyword
     }&access_token=${Vimeo_apikey}`;
-    const YouTubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${
+    const YouTubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${
       this.state.keyword
     }&type=video&key=${Youtube_apikey}`;
     fetch(YouTubeUrl)
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        //console.log(responseJson);
         //const youtubeResult = responseJson.items.map(obj=> "https://www.youtube.com/embed/"+ obj.id.videoId)
         const youtubeTitle = responseJson.items.map(obj => obj.snippet.title);
         const youtubePhoto = responseJson.items.map(
@@ -46,7 +45,7 @@ class Parser extends Component {
     fetch(VimeoUrl)
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        //console.log(responseJson);
         //const vimeoResult = responseJson.data.map(obj=> "https://player.vimeo.com"+ obj.uri.replace('videos','video'))
         const vimeoTitle = responseJson.data.map(obj => obj.name);
         const vimeoPhoto = responseJson.data.map(
@@ -63,6 +62,25 @@ class Parser extends Component {
   handleChange(e) {
     this.setState({
       keyword: e.target.value
+    });
+  }
+
+  componentDidUpdate() {
+    $("iframe").each(function() {
+      if ($(this).attr("src") == undefined) {
+        $(this)
+          .parent(".frame")
+          .parent(".overflow")
+          .parent("#card-id")
+
+          .hide();
+      } else {
+        $(this)
+          .parent(".frame")
+          .parent(".overflow")
+          .parent("#card-id")
+          .show();
+      }
     });
   }
 

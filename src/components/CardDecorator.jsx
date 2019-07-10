@@ -3,7 +3,7 @@ import "./card-style.css";
 
 const Card = props => {
   return (
-    <div className="card text-center">
+    <div id="card-id" className="card text-center">
       <div className="overflow">{props.imgsrc}</div>
       <div>
         <table>
